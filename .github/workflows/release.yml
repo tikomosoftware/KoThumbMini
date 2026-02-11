@@ -1,0 +1,63 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+    
+    - name: Extract version from tag
+      id: get_version
+      shell: pwsh
+      run: |
+        $tag = "${{ github.ref_name }}"
+        $version = $tag -replace '^v', ""
+        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+        echo "Version: $version"
+    
+    - name: Build Release Packages
+      shell: pwsh
+      run: |
+        .\build-release.ps1 -Version "${{ steps.get_version.outputs.VERSION }}"
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/KoThumbMini-v${{ steps.get_version.outputs.VERSION }}-framework-dependent.zip
+          dist/KoThumbMini-v${{ steps.get_version.outputs.VERSION }}-standalone.zip
+          dist/KoThumbMini-v${{ steps.get_version.outputs.VERSION }}-vector.zip
+        body: |
+          ## KoThumb Mini v${{ steps.get_version.outputs.VERSION }}
+          
+          ### ダウンロード / Download
+          
+          **Framework-Dependent (Lightweight):**
+          - Requires .NET 9.0 Desktop Runtime
+          
+          **Self-Contained (Single EXE):**
+          - No additional runtime required.
+          
+          **Vector Package:**
+          - Includes README_VECTOR.md.
+          
+          ---
+          © 2026 tikomo software
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
