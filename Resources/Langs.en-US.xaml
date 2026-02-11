@@ -1,0 +1,14 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="DropZoneTitle">Drop Images Here</system:String>
+    <system:String x:Key="DropZoneSubTitle">Files or Folders</system:String>
+    <system:String x:Key="LabelTargetSize">Target Size</system:String>
+    <system:String x:Key="StatusReady">Ready to process</system:String>
+    <system:String x:Key="StatusCollecting">Collecting files...</system:String>
+    <system:String x:Key="StatusNoImages">No supported images found.</system:String>
+    <system:String x:Key="StatusProcessing">Processing {0} / {1}...</system:String>
+    <system:String x:Key="StatusFinished">Finished! {0} images processed.</system:String>
+    <system:String x:Key="PresetFHD">1920px (FHD)</system:String>
+    <system:String x:Key="PresetHD">1280px (HD)</system:String>
+</ResourceDictionary>

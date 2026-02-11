@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "6nQ/2IB6LWE=",
+  "success": true,
+  "projectFilePath": "C:\\Projects\\Windows\\KoThumbMini\\KoThumbMini.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\komor\\.nuget\\packages\\sixlabors.imagesharp\\3.1.12\\sixlabors.imagesharp.3.1.12.nupkg.sha512"
+  ],
+  "logs": []
+}

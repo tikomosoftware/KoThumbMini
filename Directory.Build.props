@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <!-- アプリケーション情報 -->
+    <AppName>KoThumb Mini</AppName>
+    <AppVersion>1.0.0</AppVersion>
+    <AppDescription>究極にシンプルな画像一括リサイズ・変換ツール</AppDescription>
+    <AppCopyright>© 2026 tikomo software</AppCopyright>
+    <AppAuthor>tikomo software</AppAuthor>
+    
+    <!-- アセンブリ情報 -->
+    <AssemblyVersion>$(AppVersion)</AssemblyVersion>
+    <FileVersion>$(AppVersion)</FileVersion>
+    <Version>$(AppVersion)</Version>
+    <Copyright>$(AppCopyright)</Copyright>
+    <Product>$(AppName)</Product>
+    <Company>$(AppAuthor)</Company>
+  </PropertyGroup>
+</Project>

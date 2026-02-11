@@ -1,0 +1,232 @@
+﻿<Window x:Class="KoThumbMini.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KoThumbMini"
+        mc:Ignorable="d"
+        Title="KoThumb Mini" Height="450" Width="600"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        AllowDrop="True" Drop="Window_Drop" DragOver="Window_DragOver">
+    
+    <Window.Resources>
+        <!-- Modern Color Palette -->
+        <SolidColorBrush x:Key="BgBrush" Color="#1E1E2E" Opacity="0.95"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#C3A6FF"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#BAC2DE"/>
+        <SolidColorBrush x:Key="CardBg" Color="#313244" Opacity="0.7"/>
+
+        <!-- Styles -->
+        <!-- Style for Menu and MenuItems -->
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style TargetType="MenuItem">
+            <Setter Property="FontFamily" Value="Segoe UI, Yu Gothic UI"/>
+            <Setter Property="Foreground" Value="#1E1E2E"/> <!-- Dark text on light menu background -->
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        </Style>
+
+        <Style x:Key="SegmentedButtonStyle" TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Border" 
+                                Background="Transparent" 
+                                CornerRadius="8" 
+                                Padding="15,6"
+                                Margin="2">
+                            <ContentPresenter x:Name="Content" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}" Value="True">
+                                                <Setter Property="Foreground" Value="#1E1E2E"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentBrush}"/>
+                                <Setter Property="Foreground" Value="#1E1E2E"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="20" Background="{StaticResource BgBrush}" BorderBrush="#45475A" BorderThickness="1">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <TextBlock Text="KoThumb Mini" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource AccentBrush}"
+                           FontFamily="Segoe UI Black"
+                           HorizontalAlignment="Left"/>
+                <Button Content="" 
+                        FontFamily="Segoe MDL2 Assets" 
+                        Background="Transparent" 
+                        Foreground="{StaticResource TextSecondary}"
+                        BorderThickness="0"
+                        FontSize="16"
+                        Click="CloseButton_Click"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Cursor="Hand"/>
+            </Grid>
+
+            <!-- Drop Zone -->
+            <Border Grid.Row="1" 
+                    Margin="0,20" 
+                    CornerRadius="15" 
+                    Background="{StaticResource CardBg}"
+                    BorderBrush="#585B70"
+                    BorderThickness="2"
+                    x:Name="DropZone">
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="" 
+                                   FontFamily="Segoe MDL2 Assets" 
+                                   FontSize="64" 
+                                   Foreground="{StaticResource AccentBrush}" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10"/>
+                        <TextBlock Text="{DynamicResource DropZoneTitle}" 
+                                   FontSize="18" 
+                                   Foreground="{StaticResource TextPrimary}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource DropZoneSubTitle}" 
+                                   FontSize="14" 
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                    
+                    <!-- Progress Overlay -->
+                    <Border x:Name="ProgressOverlay" 
+                            Background="#DD11111B" 
+                            CornerRadius="15" 
+                            Visibility="Collapsed">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock x:Name="ProgressText" 
+                                       Text="Processing..." 
+                                       Foreground="{StaticResource TextPrimary}" 
+                                       FontSize="16" 
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+                            <ProgressBar x:Name="MainProgressBar" 
+                                         Width="200" 
+                                         Height="4" 
+                                         Background="#313244" 
+                                         Foreground="{StaticResource AccentBrush}"
+                                         BorderThickness="0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Controls -->
+            <Grid Grid.Row="2" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Size Slider -->
+                <StackPanel Margin="0,0,20,0">
+                    <Grid>
+                        <TextBlock Text="{DynamicResource LabelTargetSize}" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBox x:Name="SizeInput" 
+                                     Text="{Binding ElementName=SizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0}}" 
+                                     Background="Transparent" 
+                                     Foreground="{StaticResource AccentBrush}" 
+                                     BorderThickness="0,0,0,1" 
+                                     BorderBrush="{StaticResource AccentBrush}"
+                                     FontSize="12" 
+                                     FontWeight="Bold"
+                                     Width="40"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"
+                                     Margin="0,0,2,0"/>
+                            <TextBlock Text="px" Foreground="{StaticResource TextSecondary}" FontSize="11" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
+                            
+                            <!-- Presets Dropdown -->
+                            <Menu Background="Transparent">
+                                <MenuItem Header="" 
+                                          FontFamily="Segoe MDL2 Assets" 
+                                          Foreground="{StaticResource TextSecondary}"
+                                          FontSize="12"
+                                          Padding="4,0">
+                                    <MenuItem Header="512px" Click="Preset_Click" Tag="512"/>
+                                    <MenuItem Header="256px" Click="Preset_Click" Tag="256"/>
+                                    <MenuItem Header="128px" Click="Preset_Click" Tag="128"/>
+                                    <MenuItem Header="64px" Click="Preset_Click" Tag="64"/>
+                                    <MenuItem Header="48px" Click="Preset_Click" Tag="48"/>
+                                    <MenuItem Header="32px" Click="Preset_Click" Tag="32"/>
+                                    <MenuItem Header="16px" Click="Preset_Click" Tag="16"/>
+                                    <Separator/>
+                                    <MenuItem Header="{DynamicResource PresetFHD}" Click="Preset_Click" Tag="1920"/>
+                                    <MenuItem Header="{DynamicResource PresetHD}" Click="Preset_Click" Tag="1280"/>
+                                </MenuItem>
+                            </Menu>
+                        </StackPanel>
+                    </Grid>
+                    <Slider x:Name="SizeSlider" 
+                            Minimum="16" 
+                            Maximum="3840" 
+                            Value="512" 
+                            IsSnapToTickEnabled="True" 
+                            TickFrequency="1"
+                            Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <!-- Format Selection -->
+                <Border Grid.Column="1" 
+                        Background="{StaticResource CardBg}" 
+                        CornerRadius="10" 
+                        Padding="4">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="JPG" x:Name="RadioJpg" IsChecked="True" Style="{StaticResource SegmentedButtonStyle}"/>
+                        <RadioButton Content="PNG" x:Name="RadioPng" Style="{StaticResource SegmentedButtonStyle}"/>
+                        <RadioButton Content="WebP" x:Name="RadioWebp" Style="{StaticResource SegmentedButtonStyle}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Footer / Status -->
+            <TextBlock Grid.Row="3" 
+                       x:Name="StatusText"
+                       Text="{DynamicResource StatusReady}" 
+                       FontSize="11" 
+                       Foreground="{StaticResource TextSecondary}"
+                       HorizontalAlignment="Center"/>
+        </Grid>
+    </Border>
+</Window>

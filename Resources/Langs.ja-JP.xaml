@@ -1,0 +1,14 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="DropZoneTitle">画像をドロップ</system:String>
+    <system:String x:Key="DropZoneSubTitle">ファイルまたはフォルダ</system:String>
+    <system:String x:Key="LabelTargetSize">リサイズ後のサイズ</system:String>
+    <system:String x:Key="StatusReady">準備完了</system:String>
+    <system:String x:Key="StatusCollecting">ファイルを収集中...</system:String>
+    <system:String x:Key="StatusNoImages">対象の画像が見つかりません</system:String>
+    <system:String x:Key="StatusProcessing">処理中 {0} / {1}...</system:String>
+    <system:String x:Key="StatusFinished">完了！ {0} 枚を処理しました</system:String>
+    <system:String x:Key="PresetFHD">1920px (フルHD)</system:String>
+    <system:String x:Key="PresetHD">1280px (HD)</system:String>
+</ResourceDictionary>

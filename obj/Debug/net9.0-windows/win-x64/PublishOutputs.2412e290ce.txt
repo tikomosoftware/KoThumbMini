@@ -1,0 +1,6 @@
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\KoThumbMini.exe
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\KoThumbMini.dll
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\KoThumbMini.deps.json
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\KoThumbMini.runtimeconfig.json
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\KoThumbMini.pdb
+C:\Projects\Windows\KoThumbMini\bin\Debug\net9.0-windows\win-x64\publish\SixLabors.ImageSharp.dll
