@@ -28,7 +28,11 @@ if (!(Test-Path $DistDir)) {
 
 # Cleanup
 foreach ($path in @($TempFrameworkDir, $TempStandaloneDir, $TempVectorDir, $FrameworkZipFile, $StandaloneZipFile, $VectorZipFile)) {
-    if (Test-Path $path) { Remove-Item -Path $path -Recurse -Force }
+    if (Test-Path $path) {
+        try { Remove-Item -Path $path -Recurse -Force -ErrorAction Stop } catch {
+            Write-Host "Warning: Could not remove $path. It might be locked." -ForegroundColor Magenta
+        }
+    }
 }
 
 # ========================================
@@ -40,12 +44,14 @@ try {
     dotnet publish $ProjectFile -c Release --self-contained false /p:PublishSingleFile=false /p:DebugType=none /p:DebugSymbols=false --output $TempFrameworkDir
     if ($LASTEXITCODE -eq 0) {
         if (Test-Path "README.md") { Copy-Item "README.md" -Destination $TempFrameworkDir }
+        # Add a small delay to ensure file handles are released
+        Start-Sleep -Seconds 1
         Compress-Archive -Path "$TempFrameworkDir\*" -DestinationPath $FrameworkZipFile
-        Write-Host "  ✓ Framework-dependent build completed" -ForegroundColor Green
+        Write-Host "  [OK] Framework-dependent build completed" -ForegroundColor Green
         $frameworkBuildSuccess = $true
     }
 }
-catch { Write-Host "  ✗ Framework-dependent build failed: $($_.Exception.Message)" -ForegroundColor Red }
+catch { Write-Host "  [ERROR] Framework-dependent build failed: $($_.Exception.Message)" -ForegroundColor Red }
 
 # ========================================
 # 2. 自己完結型ビルド（単一EXE版）
@@ -57,12 +63,14 @@ try {
     dotnet publish $ProjectFile -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none /p:DebugSymbols=false --output $TempStandaloneDir
     if ($LASTEXITCODE -eq 0) {
         if (Test-Path "README.md") { Copy-Item "README.md" -Destination $TempStandaloneDir }
+        # Add a small delay to ensure file handles are released
+        Start-Sleep -Seconds 1
         Compress-Archive -Path "$TempStandaloneDir\*" -DestinationPath $StandaloneZipFile
-        Write-Host "  ✓ Self-contained build completed" -ForegroundColor Green
+        Write-Host "  [OK] Self-contained build completed" -ForegroundColor Green
         $standaloneBuildSuccess = $true
     }
 }
-catch { Write-Host "  ✗ Self-contained build failed: $($_.Exception.Message)" -ForegroundColor Red }
+catch { Write-Host "  [ERROR] Self-contained build failed: $($_.Exception.Message)" -ForegroundColor Red }
 
 # ========================================
 # 3. Vector用パッケージ（自己完結型 + Vector用README）
@@ -79,10 +87,10 @@ try {
         if (Test-Path "README_VECTOR.md") { Copy-Item "README_VECTOR.md" (Join-Path $TempVectorDir "README.md") -Force }
         
         Compress-Archive -Path "$TempVectorDir\*" -DestinationPath $VectorZipFile
-        Write-Host "  ✓ Vector package completed" -ForegroundColor Green
+        Write-Host "  [OK] Vector package completed" -ForegroundColor Green
     }
 }
-catch { Write-Host "  ✗ Vector package failed: $($_.Exception.Message)" -ForegroundColor Red }
+catch { Write-Host "  [ERROR] Vector package failed: $($_.Exception.Message)" -ForegroundColor Red }
 
 # Cleanup
 foreach ($path in @($TempFrameworkDir, $TempStandaloneDir, $TempVectorDir)) {

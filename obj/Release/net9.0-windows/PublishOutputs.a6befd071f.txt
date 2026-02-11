@@ -1,0 +1,5 @@
+C:\Projects\Windows\KoThumbMini\dist\temp_framework\KoThumbMini.exe
+C:\Projects\Windows\KoThumbMini\dist\temp_framework\KoThumbMini.dll
+C:\Projects\Windows\KoThumbMini\dist\temp_framework\KoThumbMini.deps.json
+C:\Projects\Windows\KoThumbMini\dist\temp_framework\KoThumbMini.runtimeconfig.json
+C:\Projects\Windows\KoThumbMini\dist\temp_framework\SixLabors.ImageSharp.dll
